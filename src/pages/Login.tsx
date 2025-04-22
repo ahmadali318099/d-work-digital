@@ -1,16 +1,47 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AuthInput } from "@/components/auth/AuthInput";
 import { SocialLoginButton } from "@/components/auth/SocialLoginButton";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState<"freelancer" | "client">("freelancer");
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // This is just a simple simulation - in a real app you'd validate with a backend
+    if (!email || !password) {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // For demo purposes, we'll determine the user type by the email prefix
+    // In a real app, this would come from your authentication system
+    if (email.startsWith("client")) {
+      navigate("/client-dashboard");
+    } else {
+      navigate("/freelancer-dashboard");
+    }
+
+    toast({
+      title: "Welcome back!",
+      description: "You have successfully logged in."
+    });
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-dwork-purple via-dwork-blue/20 to-white">
@@ -25,7 +56,7 @@ const Login: React.FC = () => {
           <h2 className="font-bold text-2xl md:text-3xl text-dwork-purple mb-2 tracking-tight">Sign In to D Work</h2>
           <p className="mb-6 text-muted-foreground">Digital Marketing. Elevated.</p>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleLogin}>
             <AuthInput 
               label="Email" 
               icon={Mail}
@@ -34,6 +65,8 @@ const Login: React.FC = () => {
               name="email"
               placeholder="you@email.com"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <AuthInput 
@@ -44,6 +77,8 @@ const Login: React.FC = () => {
               name="password"
               placeholder="Enter your password"
               required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               afterIcon={showPassword ? EyeOff : Eye}
               onAfterIconClick={() => setShowPassword((v) => !v)}
             />

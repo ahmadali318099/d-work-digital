@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,10 +32,10 @@ const Navbar: React.FC = () => {
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center">
-          <a href="#" className="text-2xl font-bold text-dwork-purple flex items-center gap-1">
+          <Link to="/" className="text-2xl font-bold text-dwork-purple flex items-center gap-1">
             <span className="text-dwork-purple">D</span>
             <span className="text-dwork-purple-600">Work</span>
-          </a>
+          </Link>
         </div>
 
         {/* Desktop Navigation */}
@@ -55,11 +56,11 @@ const Navbar: React.FC = () => {
 
         {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-4">
-          <Button variant="ghost" className="text-dwork-purple hover:bg-dwork-purple/10">
-            Log In
+          <Button variant="ghost" className="text-dwork-purple hover:bg-dwork-purple/10" asChild>
+            <Link to="/login">Log In</Link>
           </Button>
-          <Button className="bg-dwork-purple hover:bg-dwork-purple-600 text-white">
-            Sign Up
+          <Button className="bg-dwork-purple hover:bg-dwork-purple-600 text-white" asChild>
+            <Link to="/signup">Sign Up</Link>
           </Button>
         </div>
 
@@ -105,11 +106,11 @@ const Navbar: React.FC = () => {
               Testimonials
             </a>
             <div className="flex flex-col gap-2 mt-2">
-              <Button variant="ghost" className="text-dwork-purple hover:bg-dwork-purple/10 w-full justify-start">
-                Log In
+              <Button variant="ghost" className="text-dwork-purple hover:bg-dwork-purple/10 w-full justify-start" asChild>
+                <Link to="/login">Log In</Link>
               </Button>
-              <Button className="bg-dwork-purple hover:bg-dwork-purple-600 text-white w-full justify-start">
-                Sign Up
+              <Button className="bg-dwork-purple hover:bg-dwork-purple-600 text-white w-full justify-start" asChild>
+                <Link to="/signup">Sign Up</Link>
               </Button>
             </div>
           </div>

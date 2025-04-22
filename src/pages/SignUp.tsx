@@ -5,13 +5,43 @@ import { AuthInput } from "@/components/auth/AuthInput";
 import { SocialLoginButton } from "@/components/auth/SocialLoginButton";
 import { UserTypeTabs } from "@/components/auth/UserTypeTabs";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 
 const SignUp: React.FC = () => {
   const [tab, setTab] = useState<"freelancer" | "client">("freelancer");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
+  const handleSignUp = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // This is just a simple simulation - in a real app you'd validate with a backend
+    if (!name || !email || !password) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Redirect based on the selected user type
+    if (tab === "freelancer") {
+      navigate("/freelancer-dashboard");
+    } else {
+      navigate("/client-dashboard");
+    }
+    
+    toast({
+      title: "Account created!",
+      description: "Welcome to D Work, your account has been created successfully."
+    });
+  };
   
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-dwork-purple via-dwork-blue/20 to-white">
@@ -28,7 +58,7 @@ const SignUp: React.FC = () => {
           {/* User type Tabs */}
           <UserTypeTabs tab={tab} setTab={setTab} />
 
-          <form className="space-y-4 mt-6">
+          <form className="space-y-4 mt-6" onSubmit={handleSignUp}>
             <AuthInput 
               label="Full Name"
               type="text"
@@ -37,6 +67,8 @@ const SignUp: React.FC = () => {
               placeholder="John Doe"
               autoComplete="name"
               required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
             <AuthInput 
               label="Email"
@@ -46,6 +78,8 @@ const SignUp: React.FC = () => {
               placeholder="you@email.com"
               autoComplete="email"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <AuthInput 
               label="Password"
@@ -55,6 +89,8 @@ const SignUp: React.FC = () => {
               placeholder="Create a password"
               autoComplete="new-password"
               required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               afterIcon={showPassword ? EyeOff : Eye}
               onAfterIconClick={() => setShowPassword((v) => !v)}
             />
@@ -75,7 +111,7 @@ const SignUp: React.FC = () => {
               </>
             )}
 
-            <Button className="w-full mt-2 bg-dwork-purple font-semibold text-base rounded-xl py-3 shadow-md shadow-dwork-purple/10 hover-scale transition">Sign Up</Button>
+            <Button type="submit" className="w-full mt-2 bg-dwork-purple font-semibold text-base rounded-xl py-3 shadow-md shadow-dwork-purple/10 hover-scale transition">Sign Up</Button>
           </form>
 
           <div className="my-6 flex items-center gap-3">

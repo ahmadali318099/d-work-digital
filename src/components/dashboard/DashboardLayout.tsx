@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NavigationSidebar } from "./NavigationSidebar";
+import { useNavigate } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 
 type DashboardLayoutProps = {
   children: React.ReactNode;
@@ -20,6 +22,16 @@ type DashboardLayoutProps = {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, userType }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    // In a real app, you would handle logout logic here
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out."
+    });
+    navigate("/");
+  };
   
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -37,7 +49,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, userType })
           </Button>
           
           {/* Logo */}
-          <div className="text-xl font-bold text-dwork-purple flex items-center gap-1">
+          <div className="text-xl font-bold text-dwork-purple flex items-center gap-1 cursor-pointer" onClick={() => navigate("/")}>
             <span className="text-dwork-purple">D</span>
             <span className="text-dwork-purple-600">Work</span>
           </div>
@@ -103,7 +115,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, userType })
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Billing</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-red-600">Log out</DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600" onClick={handleLogout}>Log out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

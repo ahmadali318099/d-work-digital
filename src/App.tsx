@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,6 +12,7 @@ import FreelancerDashboard from "./pages/FreelancerDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
 import PostJob from "./pages/PostJob";
 import MyJobs from "./pages/MyJobs";
+import Freelancers from "./pages/Freelancers";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +30,7 @@ const App = () => (
           <Route path="/client-dashboard" element={<ClientDashboard />} />
           <Route path="/post-job" element={<PostJob />} />
           <Route path="/my-jobs" element={<MyJobs />} />
+          <Route path="/freelancers" element={<Freelancers />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

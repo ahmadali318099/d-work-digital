@@ -10,6 +10,7 @@ import SignUp from "./pages/SignUp";
 import FreelancerDashboard from "./pages/FreelancerDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
 import PostJob from "./pages/PostJob";
+import MyJobs from "./pages/MyJobs";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/freelancer-dashboard" element={<FreelancerDashboard />} />
           <Route path="/client-dashboard" element={<ClientDashboard />} />
           <Route path="/post-job" element={<PostJob />} />
+          <Route path="/my-jobs" element={<MyJobs />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

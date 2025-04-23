@@ -10,7 +10,9 @@ import {
   User, 
   Home, 
   X,
-  PlusCircle
+  PlusCircle,
+  Search,
+  DollarSign
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
@@ -32,10 +34,10 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
   // Define different menu items based on user type
   const freelancerMenuItems = [
     { icon: <LayoutDashboard size={18} />, label: "Dashboard", href: "/freelancer-dashboard" },
-    { icon: <FileText size={18} />, label: "Find Jobs", href: "/jobs" },
-    { icon: <MessageSquare size={18} />, label: "Messages", href: "/messages", badge: 3 },
-    { icon: <FileText size={18} />, label: "Proposals", href: "/proposals" },
-    { icon: <CreditCard size={18} />, label: "Earnings", href: "/earnings" },
+    { icon: <Search size={18} />, label: "Find Jobs", href: "/find-jobs" },
+    { icon: <FileText size={18} />, label: "Proposals", href: "/proposals", badge: 3 },
+    { icon: <MessageSquare size={18} />, label: "Messages", href: "/messages", badge: 5 },
+    { icon: <DollarSign size={18} />, label: "Earnings", href: "/earnings" },
     { icon: <User size={18} />, label: "Profile", href: "/profile" },
     { icon: <Settings size={18} />, label: "Settings", href: "/settings" },
   ];
@@ -80,7 +82,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
         <div className="p-4">
           <Button className="w-full bg-dwork-purple hover:bg-dwork-purple-600" asChild>
-            <Link to={userType === "freelancer" ? "/proposals/new" : "/post-job"}>
+            <Link to={userType === "freelancer" ? "/proposals" : "/post-job"}>
               {userType === "freelancer" ? "Create Proposal" : "Post a Job"}
             </Link>
           </Button>

@@ -16,6 +16,10 @@ import Freelancers from "./pages/Freelancers";
 import Messages from "./pages/Messages";
 import Billing from "./pages/Billing";
 import Settings from "./pages/Settings";
+import FindJobs from "./pages/FindJobs";
+import Proposals from "./pages/Proposals";
+import Earnings from "./pages/Earnings";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +41,10 @@ const App = () => (
           <Route path="/messages" element={<Messages />} />
           <Route path="/billing" element={<Billing />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/find-jobs" element={<FindJobs />} />
+          <Route path="/proposals" element={<Proposals />} />
+          <Route path="/earnings" element={<Earnings />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -26,6 +26,7 @@ import {
   Moon,
   Sun,
   ChevronDown,
+  LayoutDashboard,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
@@ -76,6 +77,7 @@ const TopNavbar: React.FC = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2">
+              <Briefcase className="h-4 w-4 mr-1" />
               Jobs
               <ChevronDown className="h-4 w-4" />
             </Button>
@@ -92,12 +94,14 @@ const TopNavbar: React.FC = () => {
           onClick={() => navigate('/messages')}
           className={location.pathname === "/messages" ? "bg-gray-100" : ""}
         >
+          <MessageSquare className="h-4 w-4 mr-1" />
           Messages
         </Button>
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2">
+              <CreditCard className="h-4 w-4 mr-1" />
               Finance
               <ChevronDown className="h-4 w-4" />
             </Button>
@@ -107,6 +111,15 @@ const TopNavbar: React.FC = () => {
             <DropdownMenuItem onClick={() => navigate('/billing')}>Billing</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <Button 
+          variant="ghost" 
+          onClick={() => navigate('/freelancer-dashboard')}
+          className={location.pathname === "/freelancer-dashboard" ? "bg-gray-100" : ""}
+        >
+          <LayoutDashboard className="h-4 w-4 mr-1" />
+          Dashboard
+        </Button>
       </nav>
       
       {/* Right side actions */}

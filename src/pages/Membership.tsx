@@ -7,9 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import { Check, X } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
+// Define a type for plan names to ensure type safety
+type PlanType = "basic" | "freelancer" | "premium";
+
 const Membership: React.FC = () => {
-  // Mock user data
-  const currentPlan = "freelancer"; // basic, freelancer, premium
+  // Mock user data with proper type annotation
+  const currentPlan: PlanType = "freelancer";
   
   const handleUpgrade = (plan: string) => {
     toast({

@@ -22,6 +22,11 @@ import Earnings from "./pages/Earnings";
 import Profile from "./pages/Profile";
 import JobDetail from "./pages/JobDetail";
 import FreelancerInteractions from "./pages/FreelancerInteractions";
+import ConnectsHistory from "./pages/ConnectsHistory";
+import Stats from "./pages/Stats";
+import Membership from "./pages/Membership";
+import Apps from "./pages/Apps";
+import SavedJobs from "./pages/SavedJobs";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +54,11 @@ const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/jobs/:id" element={<JobDetail />} />
           <Route path="/freelancer-interactions" element={<FreelancerInteractions />} />
+          <Route path="/connects-history" element={<ConnectsHistory />} />
+          <Route path="/stats" element={<Stats />} />
+          <Route path="/membership" element={<Membership />} />
+          <Route path="/apps" element={<Apps />} />
+          <Route path="/saved-jobs" element={<SavedJobs />} />
           {/* Redirect to find jobs page by default for logged in users */}
           <Route path="/dashboard" element={<Navigate to="/find-jobs" replace />} />
           <Route path="*" element={<NotFound />} />

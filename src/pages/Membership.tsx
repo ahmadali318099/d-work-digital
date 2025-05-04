@@ -195,7 +195,7 @@ const Membership: React.FC = () => {
                   variant={currentPlan === "freelancer" ? "outline" : "default"}
                   className={currentPlan !== "freelancer" ? "bg-dwork-purple hover:bg-dwork-purple-600 w-full" : "w-full"}
                   disabled={currentPlan === "freelancer"}
-                  onClick={() => handleUpgrade("freelancer" as PlanType)}
+                  onClick={() => handleUpgrade("freelancer")}
                 >
                   {currentPlan === "freelancer" ? "Current Plan" : 
                    currentPlan === "premium" ? "Downgrade" : "Upgrade"}
@@ -245,7 +245,7 @@ const Membership: React.FC = () => {
                   className={currentPlan !== "premium" ? "bg-dwork-purple hover:bg-dwork-purple-600 w-full" : "w-full"}
                   variant={currentPlan === "premium" ? "outline" : "default"}
                   disabled={currentPlan === "premium"}
-                  onClick={() => handleUpgrade("premium" as PlanType)}
+                  onClick={() => handleUpgrade("premium")}
                 >
                   {currentPlan === "premium" ? "Current Plan" : "Upgrade"}
                 </Button>

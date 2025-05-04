@@ -1,12 +1,12 @@
 
 import React, { useState } from "react";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import NewDashboardLayout from "@/components/dashboard/NewDashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Check, FileText, X } from "lucide-react";
+import { FileText } from "lucide-react";
 
 const Proposals = () => {
   const [activeTab, setActiveTab] = useState("active");
@@ -85,7 +85,7 @@ const Proposals = () => {
   };
 
   return (
-    <DashboardLayout userType="freelancer">
+    <NewDashboardLayout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">My Proposals</h1>
@@ -96,7 +96,11 @@ const Proposals = () => {
 
         <Card>
           <CardHeader>
-            <Tabs defaultValue="active" className="w-full" onValueChange={setActiveTab}>
+            <Tabs 
+              value={activeTab} 
+              onValueChange={setActiveTab} 
+              className="w-full"
+            >
               <TabsList className="grid w-full grid-cols-2 md:w-auto md:inline-flex">
                 <TabsTrigger value="active">Active Proposals ({activeProposals.length})</TabsTrigger>
                 <TabsTrigger value="archived">Archived Proposals ({archivedProposals.length})</TabsTrigger>
@@ -167,7 +171,7 @@ const Proposals = () => {
           </CardHeader>
         </Card>
       </div>
-    </DashboardLayout>
+    </NewDashboardLayout>
   );
 };
 

@@ -101,70 +101,70 @@ const Proposals = () => {
                 <TabsTrigger value="active">Active Proposals ({activeProposals.length})</TabsTrigger>
                 <TabsTrigger value="archived">Archived Proposals ({archivedProposals.length})</TabsTrigger>
               </TabsList>
+              
+              <TabsContent value="active" className="mt-4">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Job Title</TableHead>
+                      <TableHead className="hidden md:table-cell">Client</TableHead>
+                      <TableHead className="hidden md:table-cell">Submitted</TableHead>
+                      <TableHead>Budget</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {activeProposals.map((proposal) => (
+                      <TableRow key={proposal.id}>
+                        <TableCell className="font-medium">{proposal.jobTitle}</TableCell>
+                        <TableCell className="hidden md:table-cell">{proposal.client}</TableCell>
+                        <TableCell className="hidden md:table-cell">{proposal.submitted}</TableCell>
+                        <TableCell>{proposal.budget}</TableCell>
+                        <TableCell>{getStatusBadge(proposal.status)}</TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="ghost" size="sm">
+                            View
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TabsContent>
+              
+              <TabsContent value="archived" className="mt-4">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Job Title</TableHead>
+                      <TableHead className="hidden md:table-cell">Client</TableHead>
+                      <TableHead className="hidden md:table-cell">Submitted</TableHead>
+                      <TableHead>Budget</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {archivedProposals.map((proposal) => (
+                      <TableRow key={proposal.id}>
+                        <TableCell className="font-medium">{proposal.jobTitle}</TableCell>
+                        <TableCell className="hidden md:table-cell">{proposal.client}</TableCell>
+                        <TableCell className="hidden md:table-cell">{proposal.submitted}</TableCell>
+                        <TableCell>{proposal.budget}</TableCell>
+                        <TableCell>{getStatusBadge(proposal.status)}</TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="ghost" size="sm">
+                            View
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TabsContent>
             </Tabs>
           </CardHeader>
-          <CardContent>
-            <TabsContent value="active" className="mt-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Job Title</TableHead>
-                    <TableHead className="hidden md:table-cell">Client</TableHead>
-                    <TableHead className="hidden md:table-cell">Submitted</TableHead>
-                    <TableHead>Budget</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {activeProposals.map((proposal) => (
-                    <TableRow key={proposal.id}>
-                      <TableCell className="font-medium">{proposal.jobTitle}</TableCell>
-                      <TableCell className="hidden md:table-cell">{proposal.client}</TableCell>
-                      <TableCell className="hidden md:table-cell">{proposal.submitted}</TableCell>
-                      <TableCell>{proposal.budget}</TableCell>
-                      <TableCell>{getStatusBadge(proposal.status)}</TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" size="sm">
-                          View
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TabsContent>
-            <TabsContent value="archived" className="mt-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Job Title</TableHead>
-                    <TableHead className="hidden md:table-cell">Client</TableHead>
-                    <TableHead className="hidden md:table-cell">Submitted</TableHead>
-                    <TableHead>Budget</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {archivedProposals.map((proposal) => (
-                    <TableRow key={proposal.id}>
-                      <TableCell className="font-medium">{proposal.jobTitle}</TableCell>
-                      <TableCell className="hidden md:table-cell">{proposal.client}</TableCell>
-                      <TableCell className="hidden md:table-cell">{proposal.submitted}</TableCell>
-                      <TableCell>{proposal.budget}</TableCell>
-                      <TableCell>{getStatusBadge(proposal.status)}</TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" size="sm">
-                          View
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TabsContent>
-          </CardContent>
         </Card>
       </div>
     </DashboardLayout>

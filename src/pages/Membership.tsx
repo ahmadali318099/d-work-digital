@@ -14,11 +14,21 @@ const Membership: React.FC = () => {
   // Mock user data with proper type annotation
   const currentPlan: PlanType = "freelancer";
   
-  const handleUpgrade = (plan: string) => {
+  const handleUpgrade = (plan: PlanType) => {
     toast({
       title: "Upgrade initiated",
       description: `You're being redirected to upgrade to ${plan} plan.`
     });
+  };
+  
+  // Helper function to get plan-specific values
+  const getPlanValue = (plan: PlanType, basicValue: string | number, freelancerValue: string | number, premiumValue: string | number): string | number => {
+    switch(plan) {
+      case "basic": return basicValue;
+      case "freelancer": return freelancerValue;
+      case "premium": return premiumValue;
+      default: return basicValue; // Fallback, should never reach here
+    }
   };
   
   return (
@@ -52,11 +62,11 @@ const Membership: React.FC = () => {
                 <ul className="mt-2 space-y-1">
                   <li className="flex items-center text-sm">
                     <Check className="h-4 w-4 mr-2 text-green-500" />
-                    {currentPlan === "basic" ? "10" : currentPlan === "freelancer" ? "50" : "100"} connects per month
+                    {getPlanValue(currentPlan, 10, 50, 100)} connects per month
                   </li>
                   <li className="flex items-center text-sm">
                     <Check className="h-4 w-4 mr-2 text-green-500" />
-                    {currentPlan === "basic" ? "Standard" : "Priority"} support
+                    {getPlanValue(currentPlan, "Standard", "Priority", "Priority")} support
                   </li>
                   {currentPlan !== "basic" && (
                     <li className="flex items-center text-sm">
@@ -74,7 +84,7 @@ const Membership: React.FC = () => {
               </div>
               <div className="mt-4 md:mt-0">
                 <div className="text-3xl font-bold">
-                  ${currentPlan === "basic" ? "0" : currentPlan === "freelancer" ? "9.99" : "29.99"}<span className="text-sm font-normal">/month</span>
+                  ${getPlanValue(currentPlan, 0, 9.99, 29.99)}<span className="text-sm font-normal">/month</span>
                 </div>
                 <Button 
                   variant="outline" 
@@ -185,7 +195,7 @@ const Membership: React.FC = () => {
                   variant={currentPlan === "freelancer" ? "outline" : "default"}
                   className={currentPlan !== "freelancer" ? "bg-dwork-purple hover:bg-dwork-purple-600 w-full" : "w-full"}
                   disabled={currentPlan === "freelancer"}
-                  onClick={() => handleUpgrade("freelancer")}
+                  onClick={() => handleUpgrade("freelancer" as PlanType)}
                 >
                   {currentPlan === "freelancer" ? "Current Plan" : 
                    currentPlan === "premium" ? "Downgrade" : "Upgrade"}
@@ -235,7 +245,7 @@ const Membership: React.FC = () => {
                   className={currentPlan !== "premium" ? "bg-dwork-purple hover:bg-dwork-purple-600 w-full" : "w-full"}
                   variant={currentPlan === "premium" ? "outline" : "default"}
                   disabled={currentPlan === "premium"}
-                  onClick={() => handleUpgrade("premium")}
+                  onClick={() => handleUpgrade("premium" as PlanType)}
                 >
                   {currentPlan === "premium" ? "Current Plan" : "Upgrade"}
                 </Button>

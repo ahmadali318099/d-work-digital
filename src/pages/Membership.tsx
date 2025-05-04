@@ -31,6 +31,11 @@ const Membership: React.FC = () => {
     }
   };
   
+  // Helper function to check if two plan types are equal
+  const isPlan = (planA: PlanType, planB: PlanType): boolean => {
+    return planA === planB;
+  };
+  
   return (
     <NewDashboardLayout>
       <div className="space-y-6">
@@ -68,13 +73,13 @@ const Membership: React.FC = () => {
                     <Check className="h-4 w-4 mr-2 text-green-500" />
                     {getPlanValue(currentPlan, "Standard", "Priority", "Priority")} support
                   </li>
-                  {currentPlan !== "basic" && (
+                  {!isPlan(currentPlan, "basic") && (
                     <li className="flex items-center text-sm">
                       <Check className="h-4 w-4 mr-2 text-green-500" />
                       Enhanced profile visibility
                     </li>
                   )}
-                  {currentPlan === "premium" && (
+                  {isPlan(currentPlan, "premium") && (
                     <li className="flex items-center text-sm">
                       <Check className="h-4 w-4 mr-2 text-green-500" />
                       Premium badge on your profile
@@ -104,7 +109,7 @@ const Membership: React.FC = () => {
         {/* Plan Options */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Basic Plan */}
-          <Card className={currentPlan === "basic" ? "border-dwork-purple" : ""}>
+          <Card className={isPlan(currentPlan, "basic") ? "border-dwork-purple" : ""}>
             <CardHeader>
               <CardTitle>Basic</CardTitle>
               <CardDescription>For casual freelancers</CardDescription>
@@ -143,16 +148,16 @@ const Membership: React.FC = () => {
                 <Button 
                   variant="outline" 
                   className="w-full"
-                  disabled={currentPlan === "basic"}
+                  disabled={isPlan(currentPlan, "basic")}
                 >
-                  {currentPlan === "basic" ? "Current Plan" : "Downgrade"}
+                  {isPlan(currentPlan, "basic") ? "Current Plan" : "Downgrade"}
                 </Button>
               </div>
             </CardContent>
           </Card>
           
           {/* Freelancer Plan */}
-          <Card className={`${currentPlan === "freelancer" ? "border-dwork-purple" : ""} shadow-md`}>
+          <Card className={`${isPlan(currentPlan, "freelancer") ? "border-dwork-purple" : ""} shadow-md`}>
             <CardHeader>
               <div className="flex justify-between items-center">
                 <CardTitle>Freelancer</CardTitle>
@@ -192,20 +197,20 @@ const Membership: React.FC = () => {
                   </li>
                 </ul>
                 <Button 
-                  variant={currentPlan === "freelancer" ? "outline" : "default"}
-                  className={currentPlan !== "freelancer" ? "bg-dwork-purple hover:bg-dwork-purple-600 w-full" : "w-full"}
-                  disabled={currentPlan === "freelancer"}
+                  variant={isPlan(currentPlan, "freelancer") ? "outline" : "default"}
+                  className={!isPlan(currentPlan, "freelancer") ? "bg-dwork-purple hover:bg-dwork-purple-600 w-full" : "w-full"}
+                  disabled={isPlan(currentPlan, "freelancer")}
                   onClick={() => handleUpgrade("freelancer")}
                 >
-                  {currentPlan === "freelancer" ? "Current Plan" : 
-                   currentPlan === "premium" ? "Downgrade" : "Upgrade"}
+                  {isPlan(currentPlan, "freelancer") ? "Current Plan" : 
+                   isPlan(currentPlan, "premium") ? "Downgrade" : "Upgrade"}
                 </Button>
               </div>
             </CardContent>
           </Card>
           
           {/* Premium Plan */}
-          <Card className={currentPlan === "premium" ? "border-dwork-purple" : ""}>
+          <Card className={isPlan(currentPlan, "premium") ? "border-dwork-purple" : ""}>
             <CardHeader>
               <CardTitle>Premium</CardTitle>
               <CardDescription>For power freelancers</CardDescription>
@@ -242,12 +247,12 @@ const Membership: React.FC = () => {
                   </li>
                 </ul>
                 <Button 
-                  className={currentPlan !== "premium" ? "bg-dwork-purple hover:bg-dwork-purple-600 w-full" : "w-full"}
-                  variant={currentPlan === "premium" ? "outline" : "default"}
-                  disabled={currentPlan === "premium"}
+                  className={!isPlan(currentPlan, "premium") ? "bg-dwork-purple hover:bg-dwork-purple-600 w-full" : "w-full"}
+                  variant={isPlan(currentPlan, "premium") ? "outline" : "default"}
+                  disabled={isPlan(currentPlan, "premium")}
                   onClick={() => handleUpgrade("premium")}
                 >
-                  {currentPlan === "premium" ? "Current Plan" : "Upgrade"}
+                  {isPlan(currentPlan, "premium") ? "Current Plan" : "Upgrade"}
                 </Button>
               </div>
             </CardContent>

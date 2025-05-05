@@ -19,7 +19,8 @@ import {
   CheckCircle,
   Clock,
   FileText,
-  Star
+  Star,
+  Calendar
 } from "lucide-react";
 import EarningsChart from "@/components/dashboard/EarningsChart";
 import { Link } from "react-router-dom";

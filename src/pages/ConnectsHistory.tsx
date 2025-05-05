@@ -2,257 +2,298 @@
 import React, { useState } from "react";
 import NewDashboardLayout from "@/components/dashboard/NewDashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  ChevronLeft, 
-  ChevronRight,
-  Filter,
-  Download,
-  PlusCircle
-} from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Wallet, Download, CreditCard, DollarSign, Check, PlusCircle, ChevronDown } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 import { toast } from "@/hooks/use-toast";
 
 const ConnectsHistory: React.FC = () => {
-  const [period, setPeriod] = useState("last30");
-  const [page, setPage] = useState(1);
+  const [connects, setConnects] = useState(30);
   
-  // Mock connect usage data
-  const connectUsageHistory = [
-    {
-      id: 1,
-      date: "2025-05-03",
-      time: "14:23",
-      activity: "Applied to job",
-      jobTitle: "WordPress Website Development",
-      connectsUsed: 3,
-      balance: 27
-    },
-    {
-      id: 2,
-      date: "2025-05-02",
-      time: "10:15",
-      activity: "Messaged client",
-      jobTitle: "React Native Mobile App",
-      connectsUsed: 5,
-      balance: 30
-    },
-    {
-      id: 3,
-      date: "2025-04-29",
-      time: "16:40",
-      activity: "Applied to job",
-      jobTitle: "E-commerce Website Design",
-      connectsUsed: 3,
-      balance: 35
-    },
-    {
-      id: 4,
-      date: "2025-04-27",
-      time: "09:05",
-      activity: "Applied to job",
-      jobTitle: "Content Writer for Tech Blog",
-      connectsUsed: 2,
-      balance: 38
-    },
-    {
-      id: 5,
-      date: "2025-04-25",
-      time: "11:30",
-      activity: "Purchased connects",
-      jobTitle: "",
-      connectsUsed: -20, // Negative for purchases (adding connects)
-      balance: 40
-    }
+  // Sample data - in a real app, this would come from an API
+  const purchaseHistory = [
+    { id: 1, date: "Apr 10, 2025", type: "Purchase", amount: 20, cost: "$3.00" },
+    { id: 2, date: "Mar 25, 2025", type: "Purchase", amount: 40, cost: "$5.60" },
+    { id: 3, date: "Mar 05, 2025", type: "Bonus", amount: 10, cost: "Free" },
+    { id: 4, date: "Feb 15, 2025", type: "Purchase", amount: 60, cost: "$8.40" },
   ];
-  
-  const handleDownloadReport = () => {
-    toast({
-      title: "Report download started",
-      description: "Your connects usage report is being downloaded."
-    });
+
+  const usageHistory = [
+    { 
+      id: 1, 
+      date: "Apr 12, 2025", 
+      jobTitle: "React Developer for E-commerce Project", 
+      amount: 4,
+      type: "Job Application",
+      status: "Applied"
+    },
+    { 
+      id: 2, 
+      date: "Apr 08, 2025", 
+      jobTitle: "Node.js Backend Developer", 
+      amount: 2,
+      type: "Job Application",
+      status: "Applied"
+    },
+    { 
+      id: 3, 
+      date: "Apr 01, 2025", 
+      jobTitle: "UI/UX Designer for Mobile App", 
+      amount: 6,
+      type: "Featured Application",
+      status: "Applied"
+    },
+    { 
+      id: 4, 
+      date: "Mar 28, 2025", 
+      jobTitle: "Full Stack Developer", 
+      amount: 4,
+      type: "Job Application",
+      status: "Hired"
+    },
+  ];
+
+  // Connect purchase options
+  const connectOptions = [
+    { id: "option1", amount: 10, price: "$1.50", savings: null },
+    { id: "option2", amount: 20, price: "$3.00", savings: null },
+    { id: "option3", amount: 40, price: "$5.60", savings: "Save 6%" },
+    { id: "option4", amount: 60, price: "$8.40", savings: "Save 12%" },
+    { id: "option5", amount: 80, price: "$10.80", savings: "Save 15%" },
+  ];
+
+  const [selectedOption, setSelectedOption] = useState("option3");
+
+  const handlePurchaseConnects = () => {
+    const selectedPack = connectOptions.find(option => option.id === selectedOption);
+    if (selectedPack) {
+      toast({
+        title: "Connects Purchased",
+        description: `You've successfully purchased ${selectedPack.amount} connects for ${selectedPack.price}`
+      });
+      setConnects(connects + selectedPack.amount);
+    }
   };
-  
-  const handleBuyConnects = () => {
-    toast({
-      title: "Buy connects",
-      description: "Redirecting to connects purchase page."
-    });
-  };
-  
+
   return (
     <NewDashboardLayout>
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Connects History</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Connects</h1>
             <p className="text-muted-foreground mt-1">
-              Track your connects usage and purchases
+              Manage your connects balance and usage
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Button 
-              variant="outline" 
-              className="flex items-center gap-2"
-              onClick={handleDownloadReport}
-            >
-              <Download className="h-4 w-4" /> 
-              Download Report
-            </Button>
-            <Button 
-              className="bg-dwork-purple hover:bg-dwork-purple-600 flex items-center gap-2"
-              onClick={handleBuyConnects}
-            >
-              <PlusCircle className="h-4 w-4" /> 
-              Buy Connects
-            </Button>
-          </div>
         </div>
-        
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex flex-col">
-                <span className="text-sm text-muted-foreground">Current Balance</span>
-                <span className="text-3xl font-bold text-dwork-purple">27</span>
+
+        {/* Connects Summary Card */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card className="md:col-span-2">
+            <CardHeader className="pb-3">
+              <CardTitle>Your Connects</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex items-center gap-4">
+                  <div className="bg-dwork-purple/10 p-4 rounded-full">
+                    <Wallet className="h-10 w-10 text-dwork-purple" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Available Connects</p>
+                    <p className="text-3xl font-bold">{connects}</p>
+                  </div>
+                </div>
+                
+                <div className="flex-1 flex flex-col justify-center">
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>Monthly Usage</span>
+                    <span>16 of 70</span>
+                  </div>
+                  <Progress value={23} className="h-2" />
+                  <p className="text-xs text-muted-foreground mt-2">
+                    You've used 23% of your average monthly connects
+                  </p>
+                </div>
               </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex flex-col">
-                <span className="text-sm text-muted-foreground">Used This Month</span>
-                <span className="text-3xl font-bold text-amber-600">13</span>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex flex-col">
-                <span className="text-sm text-muted-foreground">Purchased This Month</span>
-                <span className="text-3xl font-bold text-green-600">20</span>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex flex-col">
-                <span className="text-sm text-muted-foreground">Monthly Free Connects</span>
-                <span className="text-3xl font-bold">20</span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        
-        {/* Connects History Table */}
-        <Card>
-          <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <CardTitle>Connects Usage Log</CardTitle>
-            <div className="flex items-center gap-2 mt-2 sm:mt-0">
-              <Select 
-                value={period} 
-                onValueChange={setPeriod}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select time period" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="last7">Last 7 Days</SelectItem>
-                  <SelectItem value="last30">Last 30 Days</SelectItem>
-                  <SelectItem value="last90">Last 90 Days</SelectItem>
-                  <SelectItem value="year">This Year</SelectItem>
-                </SelectContent>
-              </Select>
               
-              <Button variant="outline" size="icon">
-                <Filter className="h-4 w-4" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                <Card className="bg-gray-50">
+                  <CardContent className="p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Cost per Connect</p>
+                    <div className="flex items-center gap-1">
+                      <DollarSign className="h-4 w-4 text-green-500" />
+                      <p className="font-medium">$0.15</p>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-gray-50">
+                  <CardContent className="p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Free Monthly</p>
+                    <div className="flex items-center gap-1">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <p className="font-medium">10 Connects</p>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-gray-50">
+                  <CardContent className="p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Expiration</p>
+                    <div className="flex items-center gap-1">
+                      <PlusCircle className="h-4 w-4 text-amber-500" />
+                      <p className="font-medium">12 Months</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle>Buy Connects</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <RadioGroup 
+                value={selectedOption} 
+                onValueChange={setSelectedOption}
+                className="space-y-3"
+              >
+                {connectOptions.map((option) => (
+                  <div key={option.id} className="flex items-center space-x-2">
+                    <RadioGroupItem 
+                      value={option.id} 
+                      id={option.id} 
+                      className="data-[state=checked]:border-dwork-purple data-[state=checked]:text-dwork-purple" 
+                    />
+                    <Label htmlFor={option.id} className="flex-1 cursor-pointer">
+                      <div className="flex justify-between">
+                        <span>{option.amount} Connects</span>
+                        <span className="font-medium">{option.price}</span>
+                      </div>
+                      {option.savings && (
+                        <span className="text-xs text-green-600">{option.savings}</span>
+                      )}
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+              
+              <Button 
+                className="w-full mt-6 bg-dwork-purple hover:bg-dwork-purple-600"
+                onClick={handlePurchaseConnects}
+              >
+                Buy Connects
               </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Time</TableHead>
-                    <TableHead>Activity</TableHead>
-                    <TableHead>Job (if applicable)</TableHead>
-                    <TableHead className="text-right">Connects</TableHead>
-                    <TableHead className="text-right">Balance</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {connectUsageHistory.map((item) => (
-                    <TableRow key={item.id}>
-                      <TableCell>{item.date}</TableCell>
-                      <TableCell>{item.time}</TableCell>
-                      <TableCell>
-                        {item.activity === "Purchased connects" ? (
-                          <Badge variant="outline" className="bg-green-50 text-green-700">
-                            {item.activity}
-                          </Badge>
-                        ) : (
-                          item.activity
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {item.jobTitle ? item.jobTitle : "-"}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {item.connectsUsed < 0 ? (
-                          <span className="text-green-600 font-medium">+{Math.abs(item.connectsUsed)}</span>
-                        ) : (
-                          <span className="text-amber-600 font-medium">-{item.connectsUsed}</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-right font-medium">{item.balance}</TableCell>
+              
+              <p className="text-xs text-muted-foreground text-center mt-3">
+                Purchased connects expire after 12 months
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+        
+        {/* History Tabs */}
+        <Tabs defaultValue="usage" className="w-full">
+          <TabsList className="mb-6">
+            <TabsTrigger value="usage">
+              Usage History
+            </TabsTrigger>
+            <TabsTrigger value="purchases">
+              Purchase History
+            </TabsTrigger>
+          </TabsList>
+          
+          {/* Usage History Tab */}
+          <TabsContent value="usage">
+            <Card>
+              <CardHeader className="pb-3 flex flex-row items-center justify-between">
+                <CardTitle>Connects Usage</CardTitle>
+                <Button variant="outline" size="sm" className="flex items-center gap-1">
+                  <Download className="h-4 w-4" />
+                  Export
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Job Title</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Connects</TableHead>
+                      <TableHead>Status</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-            
-            {/* Pagination */}
-            <div className="flex items-center justify-between mt-4">
-              <div className="text-sm text-muted-foreground">
-                Showing 1-5 of 12 entries
-              </div>
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => page > 1 && setPage(page - 1)}
-                  disabled={page === 1}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                  <span className="sr-only">Previous Page</span>
+                  </TableHeader>
+                  <TableBody>
+                    {usageHistory.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell className="font-medium">{item.date}</TableCell>
+                        <TableCell className="max-w-[300px] truncate">{item.jobTitle}</TableCell>
+                        <TableCell>{item.type}</TableCell>
+                        <TableCell>{item.amount}</TableCell>
+                        <TableCell>
+                          <Badge 
+                            variant="outline" 
+                            className={`
+                              ${item.status === "Applied" ? "bg-blue-100 text-blue-800" : 
+                                item.status === "Hired" ? "bg-green-100 text-green-800" : 
+                                "bg-gray-100 text-gray-800"}
+                            `}
+                          >
+                            {item.status}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          {/* Purchase History Tab */}
+          <TabsContent value="purchases">
+            <Card>
+              <CardHeader className="pb-3 flex flex-row items-center justify-between">
+                <CardTitle>Purchase History</CardTitle>
+                <Button variant="outline" size="sm" className="flex items-center gap-1">
+                  <Download className="h-4 w-4" />
+                  Export
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(page + 1)}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                  <span className="sr-only">Next Page</span>
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Connects</TableHead>
+                      <TableHead>Cost</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {purchaseHistory.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell className="font-medium">{item.date}</TableCell>
+                        <TableCell>{item.type}</TableCell>
+                        <TableCell>{item.amount}</TableCell>
+                        <TableCell>{item.cost}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </NewDashboardLayout>
   );

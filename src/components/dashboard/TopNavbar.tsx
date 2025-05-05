@@ -31,9 +31,21 @@ import {
   Search,
   Bookmark,
   Wallet,
+  CheckCircle,
+  FileCheck,
+  Clock,
+  Home,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
 const TopNavbar: React.FC = () => {
   const navigate = useNavigate();
@@ -69,7 +81,7 @@ const TopNavbar: React.FC = () => {
   };
   
   return (
-    <header className="bg-white py-3 px-4 border-b border-gray-200 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+    <header className="bg-white py-3 px-4 border-b border-gray-200 flex items-center justify-between fixed top-0 left-0 right-0 z-30 shadow-sm">
       {/* Logo */}
       <Link to="/find-jobs" className="text-xl font-bold text-dwork-purple flex items-center gap-1">
         <span className="text-dwork-purple">D</span>
@@ -77,57 +89,162 @@ const TopNavbar: React.FC = () => {
       </Link>
       
       {/* Center Navigation */}
-      <nav className="hidden md:flex items-center gap-4">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center gap-2">
+      <NavigationMenu className="hidden md:flex">
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>
               <Briefcase className="h-4 w-4 mr-1" />
               Jobs
-              <ChevronDown className="h-4 w-4" />
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <div className="grid gap-2 p-4 w-[400px]">
+                <NavigationMenuLink asChild>
+                  <Link to="/find-jobs" className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100">
+                    <Search className="h-4 w-4 text-dwork-purple" />
+                    <div>
+                      <div className="font-medium">Find Jobs</div>
+                      <p className="text-sm text-muted-foreground">Browse available jobs that match your skills</p>
+                    </div>
+                  </Link>
+                </NavigationMenuLink>
+                <NavigationMenuLink asChild>
+                  <Link to="/my-jobs" className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100">
+                    <FileCheck className="h-4 w-4 text-green-500" />
+                    <div>
+                      <div className="font-medium">My Jobs</div>
+                      <p className="text-sm text-muted-foreground">View and manage your active and completed jobs</p>
+                    </div>
+                  </Link>
+                </NavigationMenuLink>
+                <NavigationMenuLink asChild>
+                  <Link to="/proposals" className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100">
+                    <FileText className="h-4 w-4 text-blue-500" />
+                    <div>
+                      <div className="font-medium">Proposals</div>
+                      <p className="text-sm text-muted-foreground">Track your job applications and proposals</p>
+                    </div>
+                  </Link>
+                </NavigationMenuLink>
+                <NavigationMenuLink asChild>
+                  <Link to="/saved-jobs" className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100">
+                    <Bookmark className="h-4 w-4 text-amber-500" />
+                    <div>
+                      <div className="font-medium">Saved Jobs</div>
+                      <p className="text-sm text-muted-foreground">Jobs you've bookmarked for later</p>
+                    </div>
+                  </Link>
+                </NavigationMenuLink>
+              </div>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          
+          <NavigationMenuItem>
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/messages')}
+              className={location.pathname === "/messages" ? "bg-gray-100" : ""}
+            >
+              <MessageSquare className="h-4 w-4 mr-1" />
+              Messages
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => navigate('/find-jobs')}>Find Jobs</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate('/saved-jobs')}>Saved Jobs</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate('/proposals')}>Proposals</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate('/messages')}
-          className={location.pathname === "/messages" ? "bg-gray-100" : ""}
-        >
-          <MessageSquare className="h-4 w-4 mr-1" />
-          Messages
-        </Button>
-        
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center gap-2">
+          </NavigationMenuItem>
+          
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>
               <DollarSign className="h-4 w-4 mr-1" />
               Finance
-              <ChevronDown className="h-4 w-4" />
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <div className="grid gap-2 p-4 w-[350px]">
+                <NavigationMenuLink asChild>
+                  <Link to="/earnings" className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100">
+                    <DollarSign className="h-4 w-4 text-green-500" />
+                    <div>
+                      <div className="font-medium">Earnings</div>
+                      <p className="text-sm text-muted-foreground">Track your income and payment history</p>
+                    </div>
+                  </Link>
+                </NavigationMenuLink>
+                <NavigationMenuLink asChild>
+                  <Link to="/billing" className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100">
+                    <CreditCard className="h-4 w-4 text-blue-500" />
+                    <div>
+                      <div className="font-medium">Billing</div>
+                      <p className="text-sm text-muted-foreground">Manage your payment methods and invoices</p>
+                    </div>
+                  </Link>
+                </NavigationMenuLink>
+                <NavigationMenuLink asChild>
+                  <Link to="/connects-history" className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100">
+                    <Wallet className="h-4 w-4 text-amber-500" />
+                    <div>
+                      <div className="font-medium">Connects</div>
+                      <p className="text-sm text-muted-foreground">Buy and track your connects usage</p>
+                    </div>
+                  </Link>
+                </NavigationMenuLink>
+              </div>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          
+          <NavigationMenuItem>
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/freelancer-dashboard')}
+              className={location.pathname === "/freelancer-dashboard" ? "bg-gray-100" : ""}
+            >
+              <LayoutDashboard className="h-4 w-4 mr-1" />
+              Dashboard
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => navigate('/earnings')}>Earnings</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate('/billing')}>Billing</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate('/freelancer-dashboard')}
-          className={location.pathname === "/freelancer-dashboard" ? "bg-gray-100" : ""}
-        >
-          <LayoutDashboard className="h-4 w-4 mr-1" />
-          Dashboard
-        </Button>
-      </nav>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
       
       {/* Right side actions */}
       <div className="flex items-center gap-2 md:gap-4">
+        {/* Mobile Menu Button */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild className="md:hidden">
+            <Button variant="ghost" size="icon">
+              <Menu className="h-5 w-5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-52">
+            <DropdownMenuItem onClick={() => navigate('/find-jobs')}>
+              <Search className="h-4 w-4 mr-2" /> Find Jobs
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/my-jobs')}>
+              <FileCheck className="h-4 w-4 mr-2" /> My Jobs
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/proposals')}>
+              <FileText className="h-4 w-4 mr-2" /> Proposals
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/messages')}>
+              <MessageSquare className="h-4 w-4 mr-2" /> Messages
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => navigate('/earnings')}>
+              <DollarSign className="h-4 w-4 mr-2" /> Earnings
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/billing')}>
+              <CreditCard className="h-4 w-4 mr-2" /> Billing
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/connects-history')}>
+              <Wallet className="h-4 w-4 mr-2" /> Connects
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => navigate('/freelancer-dashboard')}>
+              <LayoutDashboard className="h-4 w-4 mr-2" /> Dashboard
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/profile')}>
+              <User className="h-4 w-4 mr-2" /> Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/settings')}>
+              <Settings className="h-4 w-4 mr-2" /> Settings
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        
         {/* Search Icon */}
         <Button variant="ghost" size="icon" className="hidden md:flex">
           <Search className="h-5 w-5" />
@@ -274,5 +391,23 @@ const TopNavbar: React.FC = () => {
     </header>
   );
 };
+
+// Menu icon component
+const Menu = ({ className = "" }: { className?: string }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <line x1="4" x2="20" y1="12" y2="12" />
+    <line x1="4" x2="20" y1="6" y2="6" />
+    <line x1="4" x2="20" y1="18" y2="18" />
+  </svg>
+);
 
 export default TopNavbar;

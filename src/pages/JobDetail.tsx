@@ -5,309 +5,421 @@ import NewDashboardLayout from "@/components/dashboard/NewDashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
-  BookmarkIcon, 
-  Star, 
-  MessageCircle, 
-  Flag, 
-  Clock, 
+  Bookmark, 
+  BookmarkCheck, 
   Calendar, 
-  Globe, 
-  Briefcase
+  ChevronLeft, 
+  Clock, 
+  CreditCard, 
+  Flag,
+  Globe,
+  MapPin,
+  Star,
+  ThumbsUp,
+  User,
+  Users,
+  Tag,
+  Share2,
+  MessageSquare,
+  ArrowRight
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ApplyJobModal from "@/components/jobs/ApplyJobModal";
-import MessageClientModal from "@/components/jobs/MessageClientModal";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-// Mock job data - in a real app this would come from an API
-const mockJobs = [
-  {
-    id: "1",
-    title: "WordPress Website Development",
-    category: "Web Development",
-    description: `
-      <p>We need an experienced WordPress developer to create a custom WordPress site with WooCommerce integration for our online store. The website should have:</p>
-      <ul>
-        <li>Custom theme development based on our brand guidelines</li>
-        <li>WooCommerce setup with payment gateway integration (Stripe and PayPal)</li>
-        <li>Mobile-responsive design</li>
-        <li>Performance optimization</li>
-        <li>SEO fundamentals implementation</li>
-      </ul>
-      <p>The ideal candidate will have extensive WordPress experience and be able to implement custom solutions while ensuring the site is easy for our team to manage.</p>
-    `,
-    budget: {
-      type: "Fixed",
-      amount: "$1,000 - $2,500"
-    },
-    skills: ["WordPress", "PHP", "WooCommerce", "JavaScript", "HTML/CSS"],
-    duration: "1-3 months",
-    experience: "Intermediate",
-    stats: {
-      proposals: 12,
-      invites: 5,
-      interviews: 3,
-      lastViewed: "2 hours ago"
-    },
-    client: {
-      name: "TechSolutions Inc",
-      location: "United States",
-      spent: "$25,000+",
-      jobsPosted: 15,
-      rating: 4.8,
-      responseRate: "90%",
-      feedbackCount: 18
-    },
-    connectsToApply: 3
-  }
-];
-
-const JobDetail = () => {
+const JobDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
-  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [proposal, setProposal] = useState("");
+  const [bidAmount, setBidAmount] = useState("");
   
-  // Find job data based on ID
-  const job = mockJobs.find(job => job.id === id);
-  
-  if (!job) {
-    return (
-      <NewDashboardLayout>
-        <div className="text-center py-12">
-          <h2 className="text-2xl font-bold">Job not found</h2>
-          <p className="text-muted-foreground mt-2">The job you're looking for doesn't exist or has been removed.</p>
-          <Button 
-            className="mt-4 bg-dwork-purple hover:bg-dwork-purple-600"
-            onClick={() => navigate('/find-jobs')}
-          >
-            Browse Jobs
-          </Button>
-        </div>
-      </NewDashboardLayout>
-    );
-  }
-  
-  const handleApply = () => {
-    setIsApplyModalOpen(true);
+  // Sample job data - in a real app, this would come from an API based on the id
+  const job = {
+    id: Number(id),
+    title: "Expert React Developer Needed for E-commerce Project",
+    budget: "$2,000 - $3,000",
+    duration: "2-3 months",
+    expertiseLevel: "Intermediate to Expert",
+    postedDate: "Apr 10, 2025",
+    connectsRequired: 4,
+    proposals: 12,
+    location: "Remote",
+    projectType: "Fixed-price",
+    category: "Web Development",
+    skills: ["React", "Next.js", "Tailwind CSS", "TypeScript", "API Integration"],
+    description: `
+      We are looking for an experienced React developer to help us build a modern e-commerce platform. The developer should have experience with React, Next.js, and integrating with backend APIs.
+      
+      The project involves:
+      - Building a responsive e-commerce frontend with React and Next.js
+      - Implementing user authentication and account management
+      - Creating product listings, search functionality, and filtering
+      - Building a shopping cart and checkout process
+      - Integrating with our existing payment gateway
+      
+      The ideal candidate will have:
+      - At least 3 years of experience with React
+      - Strong knowledge of state management solutions
+      - Experience with e-commerce projects
+      - Ability to write clean, maintainable code
+      - Good communication skills and availability for regular meetings
+    `,
+    client: {
+      name: "TechSolutions Inc.",
+      country: "United States",
+      joinedDate: "January 2020",
+      totalSpent: "$45,000+",
+      hires: 24,
+      rating: 4.9,
+      reviews: 18,
+      verificationStatus: "Payment Verified",
+      avatar: "https://github.com/shadcn.png"
+    }
   };
-  
-  const handleMessage = () => {
-    setIsMessageModalOpen(true);
-  };
-  
-  const handleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
+
+  const handleSaveJob = () => {
+    setIsSaved(!isSaved);
     toast({
-      title: isBookmarked ? "Job removed from bookmarks" : "Job bookmarked",
-      description: isBookmarked ? "You've removed this job from your bookmarks." : "You can access this job later from your bookmarks.",
+      title: isSaved ? "Job Removed" : "Job Saved",
+      description: isSaved ? "Job removed from your saved list" : "Job added to your saved list"
     });
   };
-  
-  const handleReport = () => {
+
+  const handleSubmitProposal = () => {
+    if (!proposal.trim()) {
+      toast({
+        title: "Error",
+        description: "Please write a proposal message",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!bidAmount) {
+      toast({
+        title: "Error",
+        description: "Please enter your bid amount",
+        variant: "destructive"
+      });
+      return;
+    }
+
     toast({
-      title: "Job reported",
-      description: "Thank you for your report. Our team will review this job."
+      title: "Proposal Submitted",
+      description: "Your proposal has been sent to the client"
     });
+    
+    // In a real app, you would submit the proposal to an API
+    navigate("/proposals");
   };
-  
+
   return (
     <NewDashboardLayout>
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Main Job Content */}
-        <div className="flex-1 space-y-6">
-          <Card>
-            <CardHeader className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
+      <div className="space-y-6">
+        {/* Back button and Save job */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <Button 
+            variant="ghost" 
+            className="flex items-center gap-2 w-fit"
+            onClick={() => navigate(-1)}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Back to Jobs
+          </Button>
+          <div className="flex items-center gap-3">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
                   <Button 
                     variant="ghost" 
-                    size="sm" 
-                    className="p-0 h-auto text-muted-foreground"
-                    onClick={() => navigate('/find-jobs')}
+                    size="icon" 
+                    className={`hover:bg-gray-100 ${isSaved ? 'text-dwork-purple' : ''}`}
+                    onClick={handleSaveJob}
                   >
-                    Jobs
+                    {isSaved ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
                   </Button>
-                  <span className="text-muted-foreground">/</span>
-                  <span className="text-muted-foreground">{job.category}</span>
-                </div>
-                <CardTitle className="text-2xl">{job.title}</CardTitle>
-                <div className="flex flex-wrap items-center gap-2 mt-2">
-                  <Badge variant="outline" className="bg-dwork-purple/5 text-dwork-purple">
-                    {job.budget.type}
-                  </Badge>
-                  <span className="text-sm font-medium">{job.budget.amount}</span>
-                  <span className="text-sm text-muted-foreground flex items-center gap-1">
-                    <Clock className="h-3 w-3" /> {job.duration}
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    {job.experience} Level
-                  </span>
-                </div>
-              </div>
-              <div className="flex gap-2 self-end md:self-start">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={isBookmarked ? "bg-dwork-purple/10 text-dwork-purple" : ""}
-                  onClick={handleBookmark}
-                >
-                  <BookmarkIcon className="h-4 w-4 mr-1" />
-                  {isBookmarked ? "Bookmarked" : "Bookmark"}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleReport}
-                >
-                  <Flag className="h-4 w-4 mr-1" />
-                  Report
-                </Button>
-              </div>
-            </CardHeader>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {isSaved ? 'Remove from saved jobs' : 'Save this job'}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             
-            <CardContent className="space-y-6">
-              <div>
-                <h3 className="font-medium mb-2">Job Description</h3>
-                <div 
-                  className="prose max-w-none text-sm text-muted-foreground"
-                  dangerouslySetInnerHTML={{ __html: job.description }}
-                />
-              </div>
-              
-              <div>
-                <h3 className="font-medium mb-2">Skills Required</h3>
-                <div className="flex flex-wrap gap-2">
-                  {job.skills.map((skill, index) => (
-                    <Badge key={index} variant="outline" className="bg-gray-100">
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="font-medium mb-2">Activity on this job</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="bg-gray-50 p-3 rounded-md">
-                    <p className="text-sm text-muted-foreground">Proposals</p>
-                    <p className="font-semibold">{job.stats.proposals}</p>
-                  </div>
-                  <div className="bg-gray-50 p-3 rounded-md">
-                    <p className="text-sm text-muted-foreground">Invites</p>
-                    <p className="font-semibold">{job.stats.invites}</p>
-                  </div>
-                  <div className="bg-gray-50 p-3 rounded-md">
-                    <p className="text-sm text-muted-foreground">Interviews</p>
-                    <p className="font-semibold">{job.stats.interviews}</p>
-                  </div>
-                  <div className="bg-gray-50 p-3 rounded-md">
-                    <p className="text-sm text-muted-foreground">Last Viewed</p>
-                    <p className="font-semibold">{job.stats.lastViewed}</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex flex-col md:flex-row gap-4 pt-4">
-                <Button 
-                  className="bg-dwork-purple hover:bg-dwork-purple-600"
-                  onClick={handleApply}
-                >
-                  Apply Now ({job.connectsToApply} connects)
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="text-dwork-purple border-dwork-purple hover:bg-dwork-purple/10"
-                  onClick={handleMessage}
-                >
-                  <MessageCircle className="h-4 w-4 mr-2" />
-                  Message Client (5 connects)
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" className="hover:bg-gray-100">
+                    <Flag className="h-5 w-5" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Flag this job
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" className="hover:bg-gray-100">
+                    <Share2 className="h-5 w-5" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Share this job
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
         
-        {/* Client Info Sidebar */}
-        <div className="w-full lg:w-80">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">About the Client</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="font-medium">{job.client.name}</h3>
-                <div className="flex items-center">
-                  <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-                  <span className="ml-1 font-medium">{job.client.rating}</span>
-                </div>
-              </div>
-              
-              <div className="space-y-2 text-sm">
-                <div className="flex items-center gap-2">
-                  <Globe className="h-4 w-4 text-muted-foreground" />
-                  <span>{job.client.location}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Briefcase className="h-4 w-4 text-muted-foreground" />
-                  <span>{job.client.jobsPosted} jobs posted</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span>Member since 2020</span>
-                </div>
-              </div>
-              
-              <div className="py-3 border-t border-b">
-                <div className="flex justify-between mb-2">
-                  <span className="text-sm text-muted-foreground">Total spent:</span>
-                  <span className="font-medium">{job.client.spent}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Response rate:</span>
-                  <span className="font-medium">{job.client.responseRate}</span>
-                </div>
-              </div>
-              
-              <div>
-                <h4 className="text-sm font-medium mb-2">Client reviews</h4>
-                <div className="flex items-center">
-                  <Avatar className="h-8 w-8 mr-2">
-                    <AvatarFallback>FD</AvatarFallback>
-                  </Avatar>
+        {/* Job Header */}
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
+          <div className="flex flex-wrap gap-2 mt-3">
+            <Badge variant="outline" className="flex items-center gap-1">
+              <Tag className="h-3 w-3" />
+              {job.category}
+            </Badge>
+            <Badge variant="outline" className="flex items-center gap-1">
+              <Clock className="h-3 w-3" />
+              Posted {job.postedDate}
+            </Badge>
+            <Badge variant="outline" className="flex items-center gap-1">
+              <MapPin className="h-3 w-3" />
+              {job.location}
+            </Badge>
+          </div>
+        </div>
+        
+        {/* Main Content */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Left Column - Job Details */}
+          <div className="md:col-span-2 space-y-6">
+            <Card>
+              <CardContent className="p-6">
+                <div className="space-y-6">
                   <div>
-                    <div className="flex items-center">
-                      <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-                      <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-                      <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-                      <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-                      <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+                    <h2 className="text-xl font-semibold mb-4">Job Description</h2>
+                    <div className="space-y-4 text-muted-foreground">
+                      {job.description.split('\n\n').map((paragraph, index) => (
+                        <p key={index} className="text-sm">
+                          {paragraph}
+                        </p>
+                      ))}
                     </div>
-                    <p className="text-xs text-muted-foreground">"Great client to work with, clear requirements and fair payment."</p>
+                  </div>
+                  
+                  <Separator />
+                  
+                  <div>
+                    <h3 className="font-semibold mb-3">Skills and Expertise</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {job.skills.map((skill, index) => (
+                        <Badge key={index} variant="secondary" className="bg-gray-100 text-gray-800">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+            
+            {/* Apply Section */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle>Submit a Proposal</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="bg-amber-50 border border-amber-200 rounded-md p-4 text-sm">
+                  <p className="font-medium text-amber-800 mb-1">
+                    Applying to this job will use {job.connectsRequired} connects
+                  </p>
+                  <p className="text-amber-700">
+                    You currently have 30 connects available
+                  </p>
+                </div>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label htmlFor="bid-amount" className="block text-sm font-medium mb-1">
+                      Your Bid Amount
+                    </label>
+                    <div className="flex relative">
+                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                        $
+                      </span>
+                      <Input 
+                        id="bid-amount"
+                        type="number"
+                        placeholder="Enter your bid amount"
+                        className="pl-7"
+                        value={bidAmount}
+                        onChange={(e) => setBidAmount(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="proposal" className="block text-sm font-medium mb-1">
+                      Cover Letter
+                    </label>
+                    <Textarea
+                      id="proposal"
+                      placeholder="Write a compelling cover letter explaining why you're the best fit for this project..."
+                      className="min-h-40"
+                      value={proposal}
+                      onChange={(e) => setProposal(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Include relevant experience, availability, and any questions you have.
+                    </p>
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <Button 
+                      className="bg-dwork-purple hover:bg-dwork-purple-600"
+                      onClick={handleSubmitProposal}
+                    >
+                      Submit Proposal
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Right Column - Client Info & Job Meta */}
+          <div className="space-y-6">
+            {/* Job Details Card */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Job Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Budget</p>
+                    <p className="font-medium">{job.budget}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Duration</p>
+                    <p className="font-medium">{job.duration}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Experience Level</p>
+                    <p className="font-medium">{job.expertiseLevel}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Project Type</p>
+                    <p className="font-medium">{job.projectType}</p>
+                  </div>
+                </div>
+                
+                <Separator />
+                
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Proposals</p>
+                  <p className="font-medium flex items-center gap-1">
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                    <span>{job.proposals} proposals so far</span>
+                  </p>
+                </div>
+                
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Connects Required</p>
+                  <p className="font-medium flex items-center gap-1">
+                    <CreditCard className="h-4 w-4 text-muted-foreground" />
+                    <span>{job.connectsRequired} connects</span>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Client Info Card */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">About the Client</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-12 w-12">
+                    <AvatarImage src={job.client.avatar} />
+                    <AvatarFallback>{job.client.name[0]}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="font-medium">{job.client.name}</p>
+                    <p className="text-sm text-muted-foreground flex items-center gap-1">
+                      <Globe className="h-3 w-3" />
+                      {job.client.country}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="pt-2">
+                  <div className="flex items-center gap-1 mb-1">
+                    <ThumbsUp className="h-4 w-4 text-green-500" />
+                    <span className="text-sm font-medium">{job.client.verificationStatus}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-y-3 text-sm">
+                    <div>
+                      <p className="text-muted-foreground">Member Since</p>
+                      <p>{job.client.joinedDate}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Total Spent</p>
+                      <p>{job.client.totalSpent}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Hires</p>
+                      <p>{job.client.hires} freelancers</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Rating</p>
+                      <p className="flex items-center gap-1">
+                        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                        {job.client.rating} ({job.client.reviews} reviews)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <div className="flex flex-col md:flex-row gap-3">
+              <Button 
+                variant="outline" 
+                className="flex-1 flex items-center gap-2"
+                onClick={() => navigate('/find-jobs')}
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Similar Jobs
+              </Button>
+              <Button 
+                variant="outline" 
+                className="flex-1 flex items-center gap-2 justify-center"
+                onClick={() => {
+                  window.open('mailto:?subject=' + encodeURIComponent(job.title) + '&body=' + encodeURIComponent('Check out this job: ' + window.location.href), '_blank');
+                }}
+              >
+                <Share2 className="h-4 w-4" />
+                Share
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
-      
-      {/* Apply Job Modal */}
-      <ApplyJobModal 
-        job={job}
-        isOpen={isApplyModalOpen}
-        onClose={() => setIsApplyModalOpen(false)}
-      />
-      
-      {/* Message Client Modal */}
-      <MessageClientModal
-        client={job.client}
-        isOpen={isMessageModalOpen}
-        onClose={() => setIsMessageModalOpen(false)}
-      />
     </NewDashboardLayout>
   );
 };

@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import NewDashboardLayout from "@/components/dashboard/NewDashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -58,7 +58,7 @@ const Earnings = () => {
   const COLORS = ['#9b87f5', '#7E69AB', '#D6BCFA', '#33C3F0', '#1EAEDB'];
 
   return (
-    <DashboardLayout userType="freelancer">
+    <NewDashboardLayout>
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h1 className="text-3xl font-bold">Earnings</h1>
@@ -264,7 +264,7 @@ const Earnings = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </DashboardLayout>
+    </NewDashboardLayout>
   );
 };
 

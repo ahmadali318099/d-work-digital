@@ -1,519 +1,530 @@
 
-import React, { useState } from "react";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { useLocation } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React from "react";
+import NewDashboardLayout from "@/components/dashboard/NewDashboardLayout";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { CreditCard } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { 
+  LogOut, 
+  Shield, 
+  Bell, 
+  Mail, 
+  User, 
+  CreditCard, 
+  Trash
+} from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 const Settings = () => {
-  const location = useLocation();
-  // Check if the current path includes "freelancer" to determine user type
-  const userType = location.pathname.includes("freelancer") ? "freelancer" : "client";
-  
-  const [activeTab, setActiveTab] = useState("account");
+  const handleSaveProfile = () => {
+    toast({
+      title: "Profile updated",
+      description: "Your profile has been successfully updated."
+    });
+  };
+
+  const handleDeleteAccount = () => {
+    // In a real app, you would show a confirmation dialog first
+    toast({
+      title: "Account Deletion Requested",
+      description: "We've received your account deletion request.",
+      variant: "destructive"
+    });
+  };
 
   return (
-    <DashboardLayout userType={userType}>
+    <NewDashboardLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Settings</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold">Settings</h1>
+          <Button 
+            variant="outline" 
+            className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700"
+            onClick={handleDeleteAccount}
+          >
+            <Trash className="mr-2 h-4 w-4" />
+            Delete Account
+          </Button>
+        </div>
 
-        <Tabs defaultValue="account" value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="w-full border-b rounded-none justify-start p-0 h-auto">
-            <TabsTrigger value="account" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-dwork-purple">
-              Account
-            </TabsTrigger>
-            <TabsTrigger value="security" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-dwork-purple">
-              Security
-            </TabsTrigger>
-            <TabsTrigger value="notifications" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-dwork-purple">
-              Notifications
-            </TabsTrigger>
-            {userType === "freelancer" && (
-              <TabsTrigger value="payment" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-dwork-purple">
-                Payment Methods
-              </TabsTrigger>
-            )}
-            {userType === "client" && (
-              <TabsTrigger value="billing" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-dwork-purple">
-                Billing
-              </TabsTrigger>
-            )}
+        <Tabs defaultValue="profile" className="w-full">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="profile">Profile</TabsTrigger>
+            <TabsTrigger value="account">Account</TabsTrigger>
+            <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            <TabsTrigger value="billing">Billing</TabsTrigger>
+            <TabsTrigger value="security">Security</TabsTrigger>
           </TabsList>
 
-          {/* Account Settings */}
-          <TabsContent value="account" className="space-y-6">
-            {/* Profile Settings */}
+          {/* Profile Tab */}
+          <TabsContent value="profile" className="space-y-4 mt-4">
             <Card>
               <CardHeader>
-                <CardTitle>Profile Settings</CardTitle>
+                <CardTitle>General Information</CardTitle>
+                <CardDescription>
+                  Update your profile information
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Full Name</Label>
-                    <Input id="name" defaultValue={userType === "client" ? "Sarah Mitchell" : "Alex Johnson"} />
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input id="firstName" defaultValue="Alex" />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="company">
-                      {userType === "client" ? "Company Name" : "Professional Title"}
-                    </Label>
-                    <Input 
-                      id="company" 
-                      defaultValue={userType === "client" ? "InnovateTech" : "Full Stack Developer"} 
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email Address</Label>
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      defaultValue={userType === "client" ? "sarah@innovatetech.com" : "alex@example.com"} 
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input id="phone" type="tel" defaultValue="+1 (555) 123-4567" />
-                  </div>
-                </div>
-                
-                {userType === "freelancer" && (
-                  <>
-                    <div className="space-y-2">
-                      <Label htmlFor="bio">Bio / Professional Summary</Label>
-                      <Textarea 
-                        id="bio" 
-                        rows={4} 
-                        defaultValue="Experienced full stack developer specializing in React, Node.js, and cloud solutions. I've worked with clients ranging from startups to enterprise companies, delivering scalable and robust applications."
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="hourly-rate">Hourly Rate ($)</Label>
-                        <Input id="hourly-rate" type="number" defaultValue="45" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="experience">Experience Level</Label>
-                        <Select defaultValue="expert">
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select level" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="entry">Entry Level</SelectItem>
-                            <SelectItem value="intermediate">Intermediate</SelectItem>
-                            <SelectItem value="expert">Expert</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                  </>
-                )}
-                
-                <Button className="mt-4">Save Changes</Button>
-              </CardContent>
-            </Card>
-            
-            {/* Location Settings */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Location</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="country">Country</Label>
-                    <Select defaultValue="us">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select country" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="us">United States</SelectItem>
-                        <SelectItem value="ca">Canada</SelectItem>
-                        <SelectItem value="uk">United Kingdom</SelectItem>
-                        <SelectItem value="au">Australia</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="city">City</Label>
-                    <Input id="city" defaultValue="New York" />
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input id="lastName" defaultValue="Johnson" />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="timezone">Time Zone</Label>
-                  <Select defaultValue="est">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select timezone" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="est">Eastern Time (ET)</SelectItem>
-                      <SelectItem value="cst">Central Time (CT)</SelectItem>
-                      <SelectItem value="mst">Mountain Time (MT)</SelectItem>
-                      <SelectItem value="pst">Pacific Time (PT)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button className="mt-4">Update Location</Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Security Settings */}
-          <TabsContent value="security" className="space-y-6">
-            {/* Change Password */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Change Password</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="current-password">Current Password</Label>
-                  <Input id="current-password" type="password" />
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" type="email" defaultValue="alex@example.com" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="new-password">New Password</Label>
-                  <Input id="new-password" type="password" />
+                  <Label htmlFor="bio">Bio</Label>
+                  <textarea 
+                    id="bio" 
+                    className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    rows={4}
+                    defaultValue="Full-stack developer with 5+ years of experience in React, Node.js, and TypeScript."
+                  />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm New Password</Label>
-                  <Input id="confirm-password" type="password" />
+                <div className="flex justify-end">
+                  <Button onClick={handleSaveProfile}>Save Changes</Button>
                 </div>
-                <Button className="mt-4">Update Password</Button>
               </CardContent>
             </Card>
 
-            {/* Two-Factor Authentication */}
             <Card>
               <CardHeader>
-                <CardTitle>Two-Factor Authentication</CardTitle>
+                <CardTitle>Profile Visibility</CardTitle>
+                <CardDescription>
+                  Control how your profile appears to others
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Enable 2FA</p>
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Public Profile</Label>
                     <p className="text-sm text-muted-foreground">
-                      Add an extra layer of security to your account
+                      Allow your profile to be discoverable by potential clients
+                    </p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Show Earnings</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Display your earnings on your public profile
                     </p>
                   </div>
                   <Switch />
                 </div>
-                <Button variant="outline" className="mt-4">Configure 2FA</Button>
-              </CardContent>
-            </Card>
-
-            {/* Session Management */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Active Sessions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">Current Session</p>
-                      <p className="text-xs text-muted-foreground">
-                        Mac OS - Chrome - New York, USA
-                      </p>
-                    </div>
-                    <Badge variant="outline" className="bg-green-100 text-green-800">Active</Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">Mobile App</p>
-                      <p className="text-xs text-muted-foreground">
-                        iOS 16 - iPhone - Last active 2 hours ago
-                      </p>
-                    </div>
-                    <Button variant="outline" size="sm">Sign Out</Button>
-                  </div>
-                </div>
-                <Button variant="outline" className="mt-4 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">
-                  Sign Out All Devices
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Delete Account */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Delete Account</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Once you delete your account, there is no going back. Please be certain.
-                </p>
-                <Button variant="destructive">Delete Account</Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Notification Settings */}
-          <TabsContent value="notifications" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Notification Settings</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">Email Notifications</p>
-                      <p className="text-sm text-muted-foreground">
-                        Receive updates about your projects and proposals
-                      </p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">SMS Notifications</p>
-                      <p className="text-sm text-muted-foreground">
-                        Get instant alerts for important updates
-                      </p>
-                    </div>
-                    <Switch />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">Browser Notifications</p>
-                      <p className="text-sm text-muted-foreground">
-                        Receive notifications in your browser
-                      </p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">Marketing Communications</p>
-                      <p className="text-sm text-muted-foreground">
-                        Receive news and special offers
-                      </p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Notification Preferences</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-4">
-                  {userType === "freelancer" ? (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium">New Job Matches</p>
-                          <p className="text-sm text-muted-foreground">
-                            Get notified when new jobs match your skills
-                          </p>
-                        </div>
-                        <Switch defaultChecked />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium">Proposal Updates</p>
-                          <p className="text-sm text-muted-foreground">
-                            Receive updates when clients respond to proposals
-                          </p>
-                        </div>
-                        <Switch defaultChecked />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium">New Proposals</p>
-                          <p className="text-sm text-muted-foreground">
-                            Get notified when freelancers submit proposals
-                          </p>
-                        </div>
-                        <Switch defaultChecked />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium">Milestone Completion</p>
-                          <p className="text-sm text-muted-foreground">
-                            Receive updates when project milestones are completed
-                          </p>
-                        </div>
-                        <Switch defaultChecked />
-                      </div>
-                    </>
-                  )}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">Messages</p>
-                      <p className="text-sm text-muted-foreground">
-                        Receive notifications for new messages
-                      </p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
-                </div>
-                <Button className="mt-4">Save Preferences</Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Freelancer Payment Methods */}
-          {userType === "freelancer" && (
-            <TabsContent value="payment" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Payment Methods</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="border rounded-md p-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-blue-100 p-2 rounded">
-                          <CreditCard className="h-5 w-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <p className="font-medium">Bank Account</p>
-                          <p className="text-sm text-muted-foreground">Ending in 4567 • Default</p>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">Edit</Button>
-                    </div>
-                    <Button variant="outline" className="w-full">
-                      <CreditCard className="mr-2 h-4 w-4" />
-                      Add New Payment Method
-                    </Button>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Automatic Withdrawal</Label>
-                    <Select defaultValue="monthly">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select frequency" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="manual">Manual Withdrawal Only</SelectItem>
-                        <SelectItem value="monthly">Monthly</SelectItem>
-                        <SelectItem value="biweekly">Bi-weekly</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <p className="text-xs text-muted-foreground">
-                      Choose how often you want your earnings to be automatically transferred to your default payment method.
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Available for Work</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Show that you're currently open to new opportunities
                     </p>
                   </div>
-                  <Button className="mt-4">Save Payment Settings</Button>
-                </CardContent>
-              </Card>
+                  <Switch defaultChecked />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Tax Information</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="font-medium">Tax Forms</p>
-                    <Badge variant="outline">Not Submitted</Badge>
+          {/* Account Tab */}
+          <TabsContent value="account" className="space-y-4 mt-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Account Preferences</CardTitle>
+                <CardDescription>
+                  Update your account settings
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="username">Username</Label>
+                  <Input id="username" defaultValue="alexjohnson" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="timezone">Time Zone</Label>
+                  <select 
+                    id="timezone" 
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option>Pacific Time (PT)</option>
+                    <option>Mountain Time (MT)</option>
+                    <option selected>Central Time (CT)</option>
+                    <option>Eastern Time (ET)</option>
+                  </select>
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Dark Mode</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Toggle dark mode on and off
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Submit your tax information to ensure proper tax reporting and to avoid withholding.
-                  </p>
-                  <Button>Complete Tax Information</Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          )}
+                  <Switch />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Language</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Select your preferred language
+                    </p>
+                  </div>
+                  <select 
+                    className="inline-flex h-10 w-40 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option selected>English (US)</option>
+                    <option>Spanish</option>
+                    <option>French</option>
+                    <option>German</option>
+                  </select>
+                </div>
+                <div className="flex justify-end">
+                  <Button>Save Changes</Button>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-red-600">Danger Zone</CardTitle>
+                <CardDescription>
+                  Manage account termination and data deletion
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button 
+                  variant="outline" 
+                  className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700 w-full"
+                  onClick={handleDeleteAccount}
+                >
+                  <Trash className="mr-2 h-4 w-4" />
+                  Delete Account and All Data
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  This action cannot be undone. This will permanently delete your account and remove all your data from our servers.
+                </p>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-          {/* Client Billing Settings */}
-          {userType === "client" && (
-            <TabsContent value="billing" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Billing Methods</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="border rounded-md p-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-blue-100 p-2 rounded">
-                          <CreditCard className="h-5 w-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <p className="font-medium">Visa ending in 1234</p>
-                          <p className="text-sm text-muted-foreground">Expires 12/2025 • Default</p>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">Edit</Button>
+          {/* Notifications Tab */}
+          <TabsContent value="notifications" className="space-y-4 mt-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Email Notifications</CardTitle>
+                <CardDescription>
+                  Manage which emails you receive
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">New Job Matches</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Receive emails about new jobs that match your skills
+                    </p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Client Messages</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Receive emails when clients send you messages
+                    </p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Proposal Updates</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Get notified when your proposals are viewed or responded to
+                    </p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Promotional Emails</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Receive offers, updates, and news about D Work features
+                    </p>
+                  </div>
+                  <Switch />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>In-App Notifications</CardTitle>
+                <CardDescription>
+                  Control what notifications you see within the app
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">New Jobs</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Get notified about new job postings that match your profile
+                    </p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Messages</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Show notifications for new messages
+                    </p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Platform Updates</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Get notified about important platform updates
+                    </p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <div className="flex justify-end mt-4">
+                  <Button>Save Changes</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Billing Tab */}
+          <TabsContent value="billing" className="space-y-4 mt-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Payment Methods</CardTitle>
+                <CardDescription>
+                  Manage your payment methods
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between p-4 border rounded-md">
+                  <div className="flex items-center gap-4">
+                    <CreditCard className="h-6 w-6" />
+                    <div>
+                      <p className="font-medium">Visa ending in 4242</p>
+                      <p className="text-sm text-muted-foreground">Expires 12/2025</p>
                     </div>
-                    <Button variant="outline" className="w-full">
-                      <CreditCard className="mr-2 h-4 w-4" />
-                      Add New Payment Method
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm">Edit</Button>
+                    <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">Remove</Button>
+                  </div>
+                </div>
+                <Button>Add Payment Method</Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Billing History</CardTitle>
+                <CardDescription>
+                  View your past invoices
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Description</TableHead>
+                      <TableHead>Amount</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Invoice</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>April 23, 2024</TableCell>
+                      <TableCell>Premium Plan - Monthly</TableCell>
+                      <TableCell>$49.99</TableCell>
+                      <TableCell>
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          Paid
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <Button variant="link" size="sm">Download</Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>March 23, 2024</TableCell>
+                      <TableCell>Premium Plan - Monthly</TableCell>
+                      <TableCell>$49.99</TableCell>
+                      <TableCell>
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          Paid
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <Button variant="link" size="sm">Download</Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>February 23, 2024</TableCell>
+                      <TableCell>Premium Plan - Monthly</TableCell>
+                      <TableCell>$49.99</TableCell>
+                      <TableCell>
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          Paid
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <Button variant="link" size="sm">Download</Button>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Security Tab */}
+          <TabsContent value="security" className="space-y-4 mt-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Change Password</CardTitle>
+                <CardDescription>
+                  Update your password to keep your account secure
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="currentPassword">Current Password</Label>
+                  <Input id="currentPassword" type="password" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="newPassword">New Password</Label>
+                  <Input id="newPassword" type="password" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                  <Input id="confirmPassword" type="password" />
+                </div>
+                <div className="flex justify-end">
+                  <Button>Update Password</Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Two-Factor Authentication</CardTitle>
+                <CardDescription>
+                  Add an extra layer of security to your account
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Enable 2FA</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Require a verification code when logging in
+                    </p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Email Authentication</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Receive verification codes via email
+                    </p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Authenticator App</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Use an authenticator app like Google Authenticator
+                    </p>
+                  </div>
+                  <Button variant="outline" size="sm">Setup</Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Login Sessions</CardTitle>
+                <CardDescription>
+                  Manage your active sessions
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 border rounded-md">
+                    <div>
+                      <p className="font-medium">Current Session</p>
+                      <p className="text-sm text-muted-foreground">
+                        MacBook Pro • San Francisco, USA • Apr 28, 2023
+                      </p>
+                    </div>
+                    <div className="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs">Current</div>
+                  </div>
+                  <div className="flex justify-between items-center p-3 border rounded-md">
+                    <div>
+                      <p className="font-medium">iPhone 13</p>
+                      <p className="text-sm text-muted-foreground">
+                        iOS 15 • San Francisco, USA • Apr 25, 2023
+                      </p>
+                    </div>
+                    <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
+                      Logout
                     </Button>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="billing-email">Billing Email</Label>
-                    <Input id="billing-email" type="email" defaultValue="billing@innovatetech.com" />
+                  <div className="flex justify-between items-center p-3 border rounded-md">
+                    <div>
+                      <p className="font-medium">Windows PC</p>
+                      <p className="text-sm text-muted-foreground">
+                        Chrome • New York, USA • Apr 20, 2023
+                      </p>
+                    </div>
+                    <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
+                      Logout
+                    </Button>
                   </div>
-                  <Button className="mt-4">Save Billing Settings</Button>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Billing Address</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="address-line1">Address Line 1</Label>
-                      <Input id="address-line1" defaultValue="123 Business Ave" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="address-line2">Address Line 2</Label>
-                      <Input id="address-line2" defaultValue="Suite 500" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="city">City</Label>
-                      <Input id="city" defaultValue="San Francisco" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="state">State</Label>
-                      <Input id="state" defaultValue="California" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="zip">ZIP Code</Label>
-                      <Input id="zip" defaultValue="94103" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="country">Country</Label>
-                      <Select defaultValue="us">
-                        <SelectTrigger id="country">
-                          <SelectValue placeholder="Select country" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="us">United States</SelectItem>
-                          <SelectItem value="ca">Canada</SelectItem>
-                          <SelectItem value="uk">United Kingdom</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <Button className="mt-4">Update Address</Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          )}
+                </div>
+                <Button variant="outline" className="w-full">Logout from all devices</Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
       </div>
-    </DashboardLayout>
+    </NewDashboardLayout>
   );
 };
 
 export default Settings;
-

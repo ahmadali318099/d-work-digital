@@ -27,6 +27,10 @@ import {
   Sun,
   ChevronDown,
   LayoutDashboard,
+  DollarSign,
+  Search,
+  Bookmark,
+  Wallet,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
@@ -101,7 +105,7 @@ const TopNavbar: React.FC = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2">
-              <CreditCard className="h-4 w-4 mr-1" />
+              <DollarSign className="h-4 w-4 mr-1" />
               Finance
               <ChevronDown className="h-4 w-4" />
             </Button>
@@ -124,6 +128,11 @@ const TopNavbar: React.FC = () => {
       
       {/* Right side actions */}
       <div className="flex items-center gap-2 md:gap-4">
+        {/* Search Icon */}
+        <Button variant="ghost" size="icon" className="hidden md:flex">
+          <Search className="h-5 w-5" />
+        </Button>
+        
         {/* Connects Wallet */}
         <div className="hidden md:flex items-center gap-2">
           <div className="flex items-center bg-gray-100 px-3 py-1.5 rounded-full">
@@ -158,14 +167,19 @@ const TopNavbar: React.FC = () => {
             <DropdownMenuSeparator />
             <div className="max-h-80 overflow-auto">
               <DropdownMenuItem className="flex flex-col items-start cursor-pointer py-3">
-                <span className="font-medium">New proposal received</span>
-                <span className="text-sm text-muted-foreground">Alex Johnson submitted a proposal for your project</span>
+                <span className="font-medium">New job matches</span>
+                <span className="text-sm text-muted-foreground">5 new jobs match your profile</span>
                 <span className="text-xs text-muted-foreground mt-1">5 minutes ago</span>
               </DropdownMenuItem>
               <DropdownMenuItem className="flex flex-col items-start cursor-pointer py-3">
                 <span className="font-medium">Message from client</span>
                 <span className="text-sm text-muted-foreground">Sarah replied to your message about the project timeline</span>
                 <span className="text-xs text-muted-foreground mt-1">2 hours ago</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="flex flex-col items-start cursor-pointer py-3">
+                <span className="font-medium">Proposal viewed</span>
+                <span className="text-sm text-muted-foreground">A client viewed your proposal for the React Developer position</span>
+                <span className="text-xs text-muted-foreground mt-1">1 day ago</span>
               </DropdownMenuItem>
             </div>
             <DropdownMenuSeparator />
@@ -224,11 +238,11 @@ const TopNavbar: React.FC = () => {
             </DropdownMenuItem>
             
             <DropdownMenuItem onClick={() => navigate('/connects-history')} className="py-2.5">
-              <Briefcase className="h-4 w-4 mr-3" /> Connects
+              <Wallet className="h-4 w-4 mr-3" /> Connects
             </DropdownMenuItem>
             
-            <DropdownMenuItem onClick={() => navigate('/apps')} className="py-2.5">
-              <MessageSquare className="h-4 w-4 mr-3" /> Apps & Offers
+            <DropdownMenuItem onClick={() => navigate('/saved-jobs')} className="py-2.5">
+              <Bookmark className="h-4 w-4 mr-3" /> Saved Jobs
             </DropdownMenuItem>
             
             <DropdownMenuSeparator />

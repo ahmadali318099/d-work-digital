@@ -9,10 +9,6 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import FreelancerDashboard from "./pages/FreelancerDashboard";
-import ClientDashboard from "./pages/ClientDashboard";
-import PostJob from "./pages/PostJob";
-import MyJobs from "./pages/MyJobs";
-import Freelancers from "./pages/Freelancers";
 import Messages from "./pages/Messages";
 import Billing from "./pages/Billing";
 import Settings from "./pages/Settings";
@@ -41,10 +37,6 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/freelancer-dashboard" element={<FreelancerDashboard />} />
-          <Route path="/client-dashboard" element={<ClientDashboard />} />
-          <Route path="/post-job" element={<PostJob />} />
-          <Route path="/my-jobs" element={<MyJobs />} />
-          <Route path="/freelancers" element={<Freelancers />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/billing" element={<Billing />} />
           <Route path="/settings" element={<Settings />} />

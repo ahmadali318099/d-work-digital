@@ -1,6 +1,6 @@
 
 import React from "react";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import NewDashboardLayout from "@/components/dashboard/NewDashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CreditCard, Users, Wallet } from "lucide-react";
@@ -39,7 +39,7 @@ const Billing = () => {
   ];
 
   return (
-    <DashboardLayout userType="client">
+    <NewDashboardLayout>
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">Billing & Payments</h1>
 
@@ -139,7 +139,7 @@ const Billing = () => {
           </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
+    </NewDashboardLayout>
   );
 };
 

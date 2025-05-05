@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import NewDashboardLayout from "@/components/dashboard/NewDashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -73,7 +73,7 @@ const Messages = () => {
   };
 
   return (
-    <DashboardLayout userType="freelancer">
+    <NewDashboardLayout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Messages</h1>
@@ -214,7 +214,7 @@ const Messages = () => {
           </Card>
         </div>
       </div>
-    </DashboardLayout>
+    </NewDashboardLayout>
   );
 };
 

@@ -16,7 +16,8 @@ import { Mail } from "lucide-react";
 
 interface ClientType {
   name: string;
-  location: string;
+  location?: string;  // Making location optional
+  country?: string;   // Adding country as an optional property
 }
 
 interface MessageClientModalProps {
@@ -88,7 +89,7 @@ const MessageClientModal: React.FC<MessageClientModalProps> = ({ client, isOpen,
             </Avatar>
             <div>
               <p className="font-medium">{client.name}</p>
-              <p className="text-xs text-muted-foreground">{client.location}</p>
+              <p className="text-xs text-muted-foreground">{client.location || client.country || "Unknown location"}</p>
             </div>
           </div>
           

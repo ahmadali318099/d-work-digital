@@ -34,7 +34,7 @@ const FindJobs = () => {
   const [priceRange, setPriceRange] = useState([0, 100]);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [bookmarkedJobs, setBookmarkedJobs] = useState<number[]>([]);
-  const [isConnectsModalOpen, setIsConnectsModalOpen] = useState(false);
+  const [isDCurrencyModalOpen, setIsDCurrencyModalOpen] = useState(false);
 
   // Sample job listings
   const jobs = [
@@ -48,8 +48,9 @@ const FindJobs = () => {
       proposals: 7,
       skills: ["WordPress", "PHP", "WooCommerce", "CSS"],
       experience: "Intermediate",
-      connectsRequired: 3,
+      dCurrencyRequired: 3,
       verified: true,
+      matchScore: 75,
     },
     {
       id: "2",
@@ -61,8 +62,9 @@ const FindJobs = () => {
       proposals: 12,
       skills: ["React Native", "JavaScript", "API Integration", "Redux"],
       experience: "Expert",
-      connectsRequired: 5,
+      dCurrencyRequired: 5,
       verified: true,
+      matchScore: 92,
     },
     {
       id: "3",
@@ -74,8 +76,9 @@ const FindJobs = () => {
       proposals: 3,
       skills: ["Web Design", "UI/UX", "Figma", "Shopify"],
       experience: "Entry",
-      connectsRequired: 2,
+      dCurrencyRequired: 2,
       verified: false,
+      matchScore: 68,
     },
     {
       id: "4",
@@ -87,8 +90,9 @@ const FindJobs = () => {
       proposals: 18,
       skills: ["Content Writing", "SEO", "Tech Knowledge", "Research"],
       experience: "Intermediate",
-      connectsRequired: 2,
+      dCurrencyRequired: 2,
       verified: true,
+      matchScore: 85,
     },
     {
       id: "5",
@@ -100,10 +104,17 @@ const FindJobs = () => {
       proposals: 22,
       skills: ["Logo Design", "Branding", "Adobe Illustrator", "Creative"],
       experience: "Expert",
-      connectsRequired: 3,
+      dCurrencyRequired: 3,
       verified: false,
+      matchScore: 79,
     },
   ];
+
+  const getMatchLevelClass = (score: number) => {
+    if (score >= 80) return "bg-green-100 text-green-800 border-green-200";
+    if (score >= 60) return "bg-amber-100 text-amber-800 border-amber-200";
+    return "bg-red-100 text-red-800 border-red-200";
+  };
 
   // Filter jobs based on search term and filters
   const filteredJobs = jobs.filter((job) => {
@@ -270,7 +281,7 @@ const FindJobs = () => {
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="text-lg font-semibold hover:text-dwork-purple">
                           {job.title}
                         </h3>
@@ -279,6 +290,10 @@ const FindJobs = () => {
                             Verified
                           </Badge>
                         )}
+                        {/* Match Score Badge */}
+                        <Badge variant="outline" className={getMatchLevelClass(job.matchScore)}>
+                          {job.matchScore}% Match
+                        </Badge>
                       </div>
                       <p className="text-sm text-muted-foreground mb-1">{job.company}</p>
                       <div className="flex items-center gap-1">
@@ -330,14 +345,14 @@ const FindJobs = () => {
                         className="bg-dwork-purple hover:bg-dwork-purple-600 group"
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (parseInt(job.connectsRequired.toString()) > 0) {
-                            setIsConnectsModalOpen(true);
+                          if (parseInt(job.dCurrencyRequired.toString()) > 0) {
+                            setIsDCurrencyModalOpen(true);
                           } else {
                             handleJobClick(job.id);
                           }
                         }}
                       >
-                        Apply ({job.connectsRequired} connects)
+                        Apply ({job.dCurrencyRequired} D Currency)
                         <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </div>
@@ -349,10 +364,10 @@ const FindJobs = () => {
         </Card>
       </div>
 
-      {/* Buy Connects Modal */}
+      {/* Buy D Currency Modal */}
       <BuyConnectsModal 
-        isOpen={isConnectsModalOpen}
-        onClose={() => setIsConnectsModalOpen(false)}
+        isOpen={isDCurrencyModalOpen}
+        onClose={() => setIsDCurrencyModalOpen(false)}
       />
     </NewDashboardLayout>
   );

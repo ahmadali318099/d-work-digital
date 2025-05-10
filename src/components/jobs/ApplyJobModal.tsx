@@ -17,7 +17,7 @@ import { toast } from "@/hooks/use-toast";
 interface JobType {
   id: string;
   title: string;
-  connectsToApply: number;
+  dCurrencyToApply: number;
   budget: {
     type: string;
     amount: string;
@@ -39,7 +39,7 @@ const ApplyJobModal: React.FC<ApplyJobModalProps> = ({ job, isOpen, onClose }) =
     // In a real app, this would submit the application to the backend
     toast({
       title: "Proposal Submitted",
-      description: `You've successfully applied to "${job.title}" using ${job.connectsToApply} connects.`,
+      description: `You've successfully applied to "${job.title}" using ${job.dCurrencyToApply} D Currency.`,
     });
     onClose();
   };
@@ -137,8 +137,8 @@ const ApplyJobModal: React.FC<ApplyJobModalProps> = ({ job, isOpen, onClose }) =
         
         <DialogFooter className="flex-col sm:flex-row sm:justify-between">
           <div className="text-sm mb-4 sm:mb-0">
-            <span className="font-medium">Connects required: </span>
-            <span className="text-dwork-purple font-bold">{job.connectsToApply}</span>
+            <span className="font-medium">D Currency required: </span>
+            <span className="text-dwork-purple font-bold">{job.dCurrencyToApply}</span>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" onClick={onClose}>Cancel</Button>

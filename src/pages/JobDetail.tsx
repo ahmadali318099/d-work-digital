@@ -26,7 +26,9 @@ import {
   Tag,
   Share2,
   MessageSquare,
-  ArrowRight
+  ArrowRight,
+  Mail,
+  DollarSign
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -35,6 +37,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import MessageClientModal from "@/components/jobs/MessageClientModal";
 
 const JobDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -42,6 +45,18 @@ const JobDetail: React.FC = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [proposal, setProposal] = useState("");
   const [bidAmount, setBidAmount] = useState("");
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+  
+  // Match score calculation - in a real app, this would be based on 
+  // the job requirements and freelancer skills/experience
+  const matchScore = 82;
+  const getMatchLevel = (score: number) => {
+    if (score >= 80) return { text: "High Compatibility", color: "bg-green-100 text-green-800 border-green-200" };
+    if (score >= 50) return { text: "Medium Compatibility", color: "bg-amber-100 text-amber-800 border-amber-200" };
+    return { text: "Low Compatibility", color: "bg-red-100 text-red-800 border-red-200" };
+  };
+  
+  const matchLevel = getMatchLevel(matchScore);
   
   // Sample job data - in a real app, this would come from an API based on the id
   const job = {
@@ -51,7 +66,7 @@ const JobDetail: React.FC = () => {
     duration: "2-3 months",
     expertiseLevel: "Intermediate to Expert",
     postedDate: "Apr 10, 2025",
-    connectsRequired: 4,
+    dCurrencyRequired: 4,
     proposals: 12,
     location: "Remote",
     projectType: "Fixed-price",
@@ -185,7 +200,20 @@ const JobDetail: React.FC = () => {
         
         {/* Job Header */}
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+            <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
+            
+            {/* Match Score Badge */}
+            <Badge variant="outline" className={`${matchLevel.color} mt-2 md:mt-0 flex items-center gap-1.5`}>
+              <div className="h-2.5 w-2.5 rounded-full bg-current"></div>
+              <span className="text-sm font-medium">Match Score: {matchScore}% ({matchLevel.text})</span>
+            </Badge>
+          </div>
+          
+          <p className="text-sm text-muted-foreground mt-2">
+            Based on your profile, skills, and past work history
+          </p>
+          
           <div className="flex flex-wrap gap-2 mt-3">
             <Badge variant="outline" className="flex items-center gap-1">
               <Tag className="h-3 w-3" />
@@ -239,15 +267,49 @@ const JobDetail: React.FC = () => {
             {/* Apply Section */}
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle>Submit a Proposal</CardTitle>
+                <CardTitle className="flex items-center justify-between">
+                  <span>Submit a Proposal</span>
+                  
+                  {/* Match score in apply section */}
+                  <Badge variant="outline" className={`${matchLevel.color}`}>
+                    {matchScore}% Match
+                  </Badge>
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
+                <div className="flex flex-col sm:flex-row gap-4 mb-2">
+                  <Button 
+                    onClick={() => setIsMessageModalOpen(true)}
+                    className="flex gap-2 items-center bg-dwork-purple/10 text-dwork-purple hover:bg-dwork-purple/20 border border-dwork-purple/30"
+                  >
+                    <Mail className="h-4 w-4" />
+                    Message Client Directly
+                  </Button>
+                  
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button 
+                          variant="outline" 
+                          className="flex gap-2 items-center"
+                        >
+                          <DollarSign className="h-4 w-4" />
+                          Buy More D Currency
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        Purchase more D Currency to apply for jobs
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+                
                 <div className="bg-amber-50 border border-amber-200 rounded-md p-4 text-sm">
                   <p className="font-medium text-amber-800 mb-1">
-                    Applying to this job will use {job.connectsRequired} connects
+                    Applying to this job will use {job.dCurrencyRequired} D Currency
                   </p>
                   <p className="text-amber-700">
-                    You currently have 30 connects available
+                    You currently have 30 D Currency available
                   </p>
                 </div>
                 
@@ -338,10 +400,10 @@ const JobDetail: React.FC = () => {
                 </div>
                 
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Connects Required</p>
+                  <p className="text-sm text-muted-foreground mb-1">D Currency Required</p>
                   <p className="font-medium flex items-center gap-1">
                     <CreditCard className="h-4 w-4 text-muted-foreground" />
-                    <span>{job.connectsRequired} connects</span>
+                    <span>{job.dCurrencyRequired} D Currency</span>
                   </p>
                 </div>
               </CardContent>
@@ -420,6 +482,14 @@ const JobDetail: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* Message Client Modal */}
+      <MessageClientModal
+        client={job.client}
+        isOpen={isMessageModalOpen}
+        onClose={() => setIsMessageModalOpen(false)}
+        dCurrencyBalance={20}
+      />
     </NewDashboardLayout>
   );
 };

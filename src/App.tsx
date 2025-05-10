@@ -17,7 +17,7 @@ import Proposals from "./pages/Proposals";
 import Earnings from "./pages/Earnings";
 import Profile from "./pages/Profile";
 import JobDetail from "./pages/JobDetail";
-import ConnectsHistory from "./pages/ConnectsHistory";
+import DCurrencyHistory from "./pages/DCurrencyHistory";
 import Stats from "./pages/Stats";
 import Membership from "./pages/Membership";
 import SavedJobs from "./pages/SavedJobs";
@@ -45,7 +45,7 @@ const App = () => (
           <Route path="/earnings" element={<Earnings />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/jobs/:id" element={<JobDetail />} />
-          <Route path="/connects-history" element={<ConnectsHistory />} />
+          <Route path="/dcurrency-history" element={<DCurrencyHistory />} />
           <Route path="/stats" element={<Stats />} />
           <Route path="/membership" element={<Membership />} />
           <Route path="/saved-jobs" element={<SavedJobs />} />

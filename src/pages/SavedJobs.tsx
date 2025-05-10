@@ -45,6 +45,7 @@ const SavedJobs: React.FC = () => {
       duration: "2-3 months",
       postedDate: "Apr 10, 2025",
       proposals: 15,
+      matchScore: 82,
       client: {
         name: "TechSolutions Inc.",
         rating: 4.9,
@@ -61,6 +62,7 @@ const SavedJobs: React.FC = () => {
       duration: "3-6 months",
       postedDate: "Apr 8, 2025",
       proposals: 23,
+      matchScore: 95,
       client: {
         name: "ProjectPro LLC",
         rating: 4.7,
@@ -77,6 +79,7 @@ const SavedJobs: React.FC = () => {
       duration: "1-2 months",
       postedDate: "Apr 6, 2025",
       proposals: 28,
+      matchScore: 68,
       client: {
         name: "RetailGrowth",
         rating: 4.5,
@@ -93,6 +96,7 @@ const SavedJobs: React.FC = () => {
       duration: "1-2 months",
       postedDate: "Apr 5, 2025",
       proposals: 19,
+      matchScore: 74,
       client: {
         name: "HealthTech Innovations",
         rating: 4.8,
@@ -102,6 +106,12 @@ const SavedJobs: React.FC = () => {
       skills: ["UI/UX Design", "Figma", "Adobe XD", "Mobile Design", "Prototyping"]
     }
   ];
+
+  const getMatchLevelClass = (score: number) => {
+    if (score >= 80) return "bg-green-100 text-green-800 border-green-200";
+    if (score >= 60) return "bg-amber-100 text-amber-800 border-amber-200";
+    return "bg-red-100 text-red-800 border-red-200";
+  };
 
   const handleRemoveJob = (id: number) => {
     // In a real app, you would update this in the database
@@ -225,7 +235,7 @@ const SavedJobs: React.FC = () => {
                       </Link>
                     </h3>
                     
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-3 mb-4 flex-wrap">
                       <Badge variant="outline" className="bg-gray-100">
                         {job.client.country}
                       </Badge>
@@ -233,6 +243,10 @@ const SavedJobs: React.FC = () => {
                         <Clock className="h-4 w-4 mr-1 text-muted-foreground" />
                         <span className="text-muted-foreground">Posted {job.postedDate}</span>
                       </div>
+                      {/* Match Score Badge */}
+                      <Badge variant="outline" className={getMatchLevelClass(job.matchScore)}>
+                        {job.matchScore}% Match
+                      </Badge>
                     </div>
                     
                     <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
@@ -250,7 +264,7 @@ const SavedJobs: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-2">
                         <CreditCard className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">4 connects</span>
+                        <span className="text-sm">4 D Currency</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Users className="h-4 w-4 text-muted-foreground" />
